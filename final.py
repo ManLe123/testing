@@ -78,132 +78,136 @@ if data_file is not None:
     st.write("Enter the n_components")
     number = st.text_input("Enter a number", key="number1")
 
-    try:
-        number = int(number)
-        st.write(f"You entered the number: {number}")
-    except ValueError:
-        st.write("Please enter a valid integer.")
+    if number is not None:
 
-    pca = PCA(n_components=number)
-    data_pca = pca.fit_transform(data_scaled)
-  
+        try:
+            number = int(number)
+            st.write(f"You entered the number: {number}")
+        except ValueError:
+            st.write("Please enter a valid integer.")
     
-    import plotly.express as px
-    from sklearn.cluster import SpectralClustering , KMeans
-    # Calculate the inertia for different cluster sizes
-    inertia = []
-    for i in range(1, 10):
-        cluster = KMeans(n_clusters=i)
-        cluster.fit(data_pca)
-        inertia.append(cluster.inertia_)
-    
-    # Create the Elbow graph using Plotly
-    fig = px.line(x=range(1, 10), y=inertia, 
-                  title="Elbow Graph for Spectral Clustering",
-                  labels={"x": "Number of Clusters", "y": "Inertia"})
-    
-    # Display the plot in Streamlit
-    st.plotly_chart(fig)
-
-    st.write("Enter number of clusters")
-    number2 = st.text_input("Enter a number", key="number2")
-
-    try:
-        number2 = int(number2)
-        st.write(f"You entered the number: {number2}")
-    except ValueError:
-        st.write("Please enter a valid integer.")
-    
-    # Perform Spectral Clustering
-    spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
-    clusters = spectral_clustering.fit_predict(data_pca)
-
-    test_index = range(len(data_pca))
-    # Create the plot
-    fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axis
-    scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
-                         c=clusters[test_index], cmap='viridis')
-    
-    # Add labels, title, and colorbar
-    ax.set_title('Spectral Clustering based on Betting Odds')
-    ax.set_xlabel('Data Point Index')
-    ax.set_ylabel('PCA Component')
-    colorbar = plt.colorbar(scatter, ax=ax)
-    colorbar.set_label('Cluster')
-    
-    # Display the plot in Streamlit
-    st.pyplot(fig)
-    
-    from sklearn.metrics import davies_bouldin_score
-    
-    # Compute Davies-Bouldin Index using PCA-transformed data
-    st.write("Davies-Bouldin Score")
-    db_score = davies_bouldin_score(data_pca, clusters)
-    st.write(f'Davies-Bouldin Index (on PCA-transformed data): {db_score}')
-    
-    from sklearn.metrics import calinski_harabasz_score
-    
-    # Compute Calinski-Harabasz Index
-    st.write("Calinski-Harabasz Score")
-    ch_score = calinski_harabasz_score(data_pca, clusters)
-    st.write(f'Calinski-Harabasz Index: {ch_score}')
-    
-    y_resampled_df = y_resampled.to_frame()
-    print(y_resampled_df.columns)
-    
-    # Add cluster assignments as a new column to the DataFrame.
-    X_resampled['Spectral_Cluster'] = clusters
-
-    st.write("Prediction Quality")
-    # Analyze clusters with respect to prediction quality
-    # Loop through each cluster and display the prediction quality distribution in Streamlit
-    for cluster_id in range(3):
-        cluster_data = y_resampled_df[X_resampled['Spectral_Cluster'] == cluster_id]
-        quality_distribution = cluster_data['winning_team'].value_counts()
+        pca = PCA(n_components=number)
+        data_pca = pca.fit_transform(data_scaled)
+      
         
-        # Display cluster prediction quality distribution in Streamlit
-        st.write(f'Cluster {cluster_id} Prediction Quality Distribution:')
-        st.write(quality_distribution)
-        st.write("")  # Adds a space between clusters
+        import plotly.express as px
+        from sklearn.cluster import SpectralClustering , KMeans
+        # Calculate the inertia for different cluster sizes
+        inertia = []
+        for i in range(1, 10):
+            cluster = KMeans(n_clusters=i)
+            cluster.fit(data_pca)
+            inertia.append(cluster.inertia_)
         
-        # Visualization of Clusters vs. Actual Outcomes
-    st.write("Clusters vs. Actual Outcomes")
-    # Create the plot
-    fig, ax = plt.subplots(figsize=(12, 8))  # Create a figure and axis
-    scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
-                         c=y_resampled[test_index], cmap='viridis', marker='o', 
-                         alpha=0.5, label='Actual Outcomes')
+        # Create the Elbow graph using Plotly
+        fig = px.line(x=range(1, 10), y=inertia, 
+                      title="Elbow Graph for Spectral Clustering",
+                      labels={"x": "Number of Clusters", "y": "Inertia"})
+        
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
     
-    # Add title, labels, and colorbar
-    ax.set_title('PCA of Data with Actual Outcomes')
-    ax.set_xlabel('Data Point Index')
-    ax.set_ylabel('PCA Component')
-    colorbar = plt.colorbar(scatter, ax=ax)
-    colorbar.set_label('Actual Outcome')
+        st.write("Enter number of clusters")
+        number2 = st.text_input("Enter a number", key="number2")
+
+        if number2 is not None:
     
-    # Display the plot in Streamlit
-    st.pyplot(fig)
-    
-    import streamlit as st
-    import matplotlib.pyplot as plt
-    
-    # Assuming `test_index`, `data_pca`, and `clusters` are defined variables
-    
-    # Create the plot
-    fig, ax = plt.subplots(figsize=(12, 8))  # Create a figure and axis
-    scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
-                         c=clusters[test_index], cmap='viridis', marker='o', 
-                         alpha=0.5, label='Clusters')
-    
-    # Add title, labels, and colorbar
-    ax.set_title('PCA of Data with Clustering Results')
-    ax.set_xlabel('Data Point Index')
-    ax.set_ylabel('PCA Component')
-    colorbar = plt.colorbar(scatter, ax=ax)
-    colorbar.set_label('Cluster')
-    
-    # Display the plot in Streamlit
-    st.pyplot(fig)
+            try:
+                number2 = int(number2)
+                st.write(f"You entered the number: {number2}")
+            except ValueError:
+                st.write("Please enter a valid integer.")
+            
+            # Perform Spectral Clustering
+            spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
+            clusters = spectral_clustering.fit_predict(data_pca)
+        
+            test_index = range(len(data_pca))
+            # Create the plot
+            fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axis
+            scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
+                                 c=clusters[test_index], cmap='viridis')
+            
+            # Add labels, title, and colorbar
+            ax.set_title('Spectral Clustering based on Betting Odds')
+            ax.set_xlabel('Data Point Index')
+            ax.set_ylabel('PCA Component')
+            colorbar = plt.colorbar(scatter, ax=ax)
+            colorbar.set_label('Cluster')
+            
+            # Display the plot in Streamlit
+            st.pyplot(fig)
+            
+            from sklearn.metrics import davies_bouldin_score
+            
+            # Compute Davies-Bouldin Index using PCA-transformed data
+            st.write("Davies-Bouldin Score")
+            db_score = davies_bouldin_score(data_pca, clusters)
+            st.write(f'Davies-Bouldin Index (on PCA-transformed data): {db_score}')
+            
+            from sklearn.metrics import calinski_harabasz_score
+            
+            # Compute Calinski-Harabasz Index
+            st.write("Calinski-Harabasz Score")
+            ch_score = calinski_harabasz_score(data_pca, clusters)
+            st.write(f'Calinski-Harabasz Index: {ch_score}')
+            
+            y_resampled_df = y_resampled.to_frame()
+            print(y_resampled_df.columns)
+            
+            # Add cluster assignments as a new column to the DataFrame.
+            X_resampled['Spectral_Cluster'] = clusters
+        
+            st.write("Prediction Quality")
+            # Analyze clusters with respect to prediction quality
+            # Loop through each cluster and display the prediction quality distribution in Streamlit
+            for cluster_id in range(3):
+                cluster_data = y_resampled_df[X_resampled['Spectral_Cluster'] == cluster_id]
+                quality_distribution = cluster_data['winning_team'].value_counts()
+                
+                # Display cluster prediction quality distribution in Streamlit
+                st.write(f'Cluster {cluster_id} Prediction Quality Distribution:')
+                st.write(quality_distribution)
+                st.write("")  # Adds a space between clusters
+                
+                # Visualization of Clusters vs. Actual Outcomes
+            st.write("Clusters vs. Actual Outcomes")
+            # Create the plot
+            fig, ax = plt.subplots(figsize=(12, 8))  # Create a figure and axis
+            scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
+                                 c=y_resampled[test_index], cmap='viridis', marker='o', 
+                                 alpha=0.5, label='Actual Outcomes')
+            
+            # Add title, labels, and colorbar
+            ax.set_title('PCA of Data with Actual Outcomes')
+            ax.set_xlabel('Data Point Index')
+            ax.set_ylabel('PCA Component')
+            colorbar = plt.colorbar(scatter, ax=ax)
+            colorbar.set_label('Actual Outcome')
+            
+            # Display the plot in Streamlit
+            st.pyplot(fig)
+            
+            import streamlit as st
+            import matplotlib.pyplot as plt
+            
+            # Assuming `test_index`, `data_pca`, and `clusters` are defined variables
+            
+            # Create the plot
+            fig, ax = plt.subplots(figsize=(12, 8))  # Create a figure and axis
+            scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
+                                 c=clusters[test_index], cmap='viridis', marker='o', 
+                                 alpha=0.5, label='Clusters')
+            
+            # Add title, labels, and colorbar
+            ax.set_title('PCA of Data with Clustering Results')
+            ax.set_xlabel('Data Point Index')
+            ax.set_ylabel('PCA Component')
+            colorbar = plt.colorbar(scatter, ax=ax)
+            colorbar.set_label('Cluster')
+            
+            # Display the plot in Streamlit
+            st.pyplot(fig)
 else:
     st.write("Please upload a CSV file.")
 
