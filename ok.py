@@ -155,7 +155,7 @@ if data_file is not None:
         st.write("")  # Adds a space between clusters
         
         # Visualization of Clusters vs. Actual Outcomes
-   st.write("Visualization of Clusters vs. Actual Outcomes")
+    st.write("Clusters vs. Actual Outcomes")
     # Create the plot
     fig, ax = plt.subplots(figsize=(12, 8))  # Create a figure and axis
     scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
