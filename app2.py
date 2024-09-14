@@ -98,7 +98,8 @@ if data_file is not None:
     # Perform Spectral Clustering
     spectral_clustering = SpectralClustering(n_clusters=3, affinity='rbf', gamma=10, random_state=42)
     clusters = spectral_clustering.fit_predict(data_pca)
-    
+
+    test_index = range(len(data_pca))
     # Create the plot
     fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axis
     scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
