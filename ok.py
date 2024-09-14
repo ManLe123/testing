@@ -100,7 +100,7 @@ if data_file is not None:
     st.plotly_chart(fig)
 
     st.write("Enter number of clusters")
-    number2 = st.number_input("Enter a number", min_value=1, max_value=5, key="unique_key2", format="%d")
+    number2 = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key2", format="%d")
     
     # Perform Spectral Clustering
     spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
