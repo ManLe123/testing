@@ -76,7 +76,13 @@ if data_file is not None:
     st.pyplot(fig)
 
     st.write("Enter the n_components")
-    number = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key1", format="%d")
+    number = st.text_input("Enter a number")
+
+    try:
+        number = int(number)
+        st.write(f"You entered the number: {number}")
+    except ValueError:
+        st.write("Please enter a valid integer.")
 
     pca = PCA(n_components=number)
     data_pca = pca.fit_transform(data_scaled)
@@ -100,7 +106,13 @@ if data_file is not None:
     st.plotly_chart(fig)
 
     st.write("Enter number of clusters")
-    number2 = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key2", format="%d")
+    number2 = st.text_input("Enter a number")
+
+    try:
+        number2 = int(number2)
+        st.write(f"You entered the number: {number2}")
+    except ValueError:
+        st.write("Please enter a valid integer.")
     
     # Perform Spectral Clustering
     spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
