@@ -75,10 +75,10 @@ if data_file is not None:
     # Display the plot in Streamlit
     st.pyplot(fig)
 
-    st.write("Enter the n_components")
-    number = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key1", format="%d")
+ #   st.write("Enter the n_components")
+  #  number = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key1", format="%d")
 
-    pca = PCA(n_components=number)
+    pca = PCA(n_components=1)
     data_pca = pca.fit_transform(data_scaled)
   
     
@@ -99,11 +99,11 @@ if data_file is not None:
     # Display the plot in Streamlit
     st.plotly_chart(fig)
 
-    st.write("Enter number of clusters")
-    number2 = st.number_input("Enter a number", min_value=1, max_value=5, key="unique_key2", format="%d")
+  #  st.write("Enter number of clusters")
+#    number2 = st.number_input("Enter a number", min_value=1, max_value=5, key="unique_key2", format="%d")
     
     # Perform Spectral Clustering
-    spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
+    spectral_clustering = SpectralClustering(n_clusters=3, affinity='rbf', gamma=10, random_state=42)
     clusters = spectral_clustering.fit_predict(data_pca)
 
     test_index = range(len(data_pca))
