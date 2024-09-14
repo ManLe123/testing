@@ -75,10 +75,10 @@ if data_file is not None:
     # Display the plot in Streamlit
     st.pyplot(fig)
 
- #   st.write("Enter the n_components")
-  #  number = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key1", format="%d")
+    st.write("Enter the n_components")
+    number = st.number_input("Enter a number", min_value=0, max_value=5, key="unique_key1", format="%d")
 
-    pca = PCA(n_components=1)
+    pca = PCA(n_components=number)
     data_pca = pca.fit_transform(data_scaled)
   
     
@@ -99,11 +99,11 @@ if data_file is not None:
     # Display the plot in Streamlit
     st.plotly_chart(fig)
 
-  #  st.write("Enter number of clusters")
-#    number2 = st.number_input("Enter a number", min_value=1, max_value=5, key="unique_key2", format="%d")
+    st.write("Enter number of clusters")
+    number2 = st.number_input("Enter a number", min_value=1, max_value=5, key="unique_key2", format="%d")
     
     # Perform Spectral Clustering
-    spectral_clustering = SpectralClustering(n_clusters=3, affinity='rbf', gamma=10, random_state=42)
+    spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
     clusters = spectral_clustering.fit_predict(data_pca)
 
     test_index = range(len(data_pca))
@@ -125,12 +125,14 @@ if data_file is not None:
     from sklearn.metrics import davies_bouldin_score
     
     # Compute Davies-Bouldin Index using PCA-transformed data
+    st.write("Davies-Bouldin Score")
     db_score = davies_bouldin_score(data_pca, clusters)
     st.write(f'Davies-Bouldin Index (on PCA-transformed data): {db_score}')
     
     from sklearn.metrics import calinski_harabasz_score
     
     # Compute Calinski-Harabasz Index
+    st.write("Calinski-Harabasz Score")
     ch_score = calinski_harabasz_score(data_pca, clusters)
     st.write(f'Calinski-Harabasz Index: {ch_score}')
     
@@ -139,7 +141,8 @@ if data_file is not None:
     
     # Add cluster assignments as a new column to the DataFrame.
     X_resampled['Spectral_Cluster'] = clusters
-    
+
+    st.write("Prediction Quality")
     # Analyze clusters with respect to prediction quality
     # Loop through each cluster and display the prediction quality distribution in Streamlit
     for cluster_id in range(3):
@@ -152,6 +155,7 @@ if data_file is not None:
         st.write("")  # Adds a space between clusters
         
         # Visualization of Clusters vs. Actual Outcomes
+   st.write("Visualization of Clusters vs. Actual Outcomes")
     # Create the plot
     fig, ax = plt.subplots(figsize=(12, 8))  # Create a figure and axis
     scatter = ax.scatter(range(len(test_index)), data_pca[test_index, 0], 
