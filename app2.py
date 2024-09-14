@@ -74,9 +74,13 @@ if data_file is not None:
     
     # Display the plot in Streamlit
     st.pyplot(fig)
-    
-    pca = PCA(n_components=1)
+
+    st.write("Enter the n_components")
+    number = st.number_input("Enter a number", min_value=0, max_value=100, value=50)
+
+    pca = PCA(n_components=number)
     data_pca = pca.fit_transform(data_scaled)
+  
     
     import plotly.express as px
     from sklearn.cluster import SpectralClustering , KMeans
@@ -94,9 +98,12 @@ if data_file is not None:
     
     # Display the plot in Streamlit
     st.plotly_chart(fig)
+
+    st.write("Enter number of clusters")
+    number2 = st.number_input("Enter a number", min_value=0, max_value=100, value=50)
     
     # Perform Spectral Clustering
-    spectral_clustering = SpectralClustering(n_clusters=3, affinity='rbf', gamma=10, random_state=42)
+    spectral_clustering = SpectralClustering(n_clusters=number2, affinity='rbf', gamma=10, random_state=42)
     clusters = spectral_clustering.fit_predict(data_pca)
 
     test_index = range(len(data_pca))
