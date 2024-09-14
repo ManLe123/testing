@@ -6,8 +6,8 @@ from sklearn.cluster import SpectralClustering
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
-st.title("Spectral Clustering")
-st.write("This app performs spectral clustering on the provided dataset.")
+st.title("Betting Odds Analysis Using Spectral Clustering")
+st.write("This app performs spectral clustering on Betting Odds.")
 
 #Take data from 2014-2016
 data_file = st.file_uploader("Upload CSV", type=["csv"])
