@@ -76,7 +76,7 @@ if data_file is not None:
     st.pyplot(fig)
 
     st.write("Enter the n_components")
-    number = st.text_input("Enter a number")
+    number = st.text_input("Enter a number", key="number1")
 
     try:
         number = int(number)
@@ -106,7 +106,7 @@ if data_file is not None:
     st.plotly_chart(fig)
 
     st.write("Enter number of clusters")
-    number2 = st.text_input("Enter a number")
+    number2 = st.text_input("Enter a number", key="number2")
 
     try:
         number2 = int(number2)
