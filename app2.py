@@ -10,8 +10,9 @@ st.title("Spectral Clustering")
 st.write("This app performs spectral clustering on the provided dataset.")
 
 #Take data from 2014-2016
-data = st.file_uploader("Upload CSV", type=["csv"])
-if data is not None:
+data_file = st.file_uploader("Upload CSV", type=["csv"])
+if data_file is not None:
+    data = pd.read_csv(data_file)
     data_selected_years = data[data['match_year'].isin([2016, 2015, 2014])]
     
     #Encode 'winning_team' (home win = 1, draw = 0, away win = -1)
